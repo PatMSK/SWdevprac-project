@@ -1,0 +1,41 @@
+@startuml
+
+class User {
+    - name: String
+    - email: String
+    - password: String
+    - telephone: Number
+    - role: String
+    - resetPasswordToken: String
+    - resetPasswordExpire: Date
+    - createdAt: Date
+    + getSignedJwtToken()
+    + matchPassword()
+}
+
+class Dentist {
+    - name: String
+    - yearsOfExperience: Number
+    - expertise: String
+}
+
+class Appointment {
+    - apptDate: Date
+    - createAt: Date
+    + user: ObjectId → User
+    + dentist: ObjectId → Dentist
+}
+
+class Report {
+    - Title: String
+    - Description: String
+    - Status: String ("Pending" | "In Progress" | "Resolved")
+    - CreateAt: Date
+    + user: ObjectId → User
+}
+
+User "1" --> "*" Appointment : books >
+User "1" --> "*" Report : submits >
+Appointment "*" --> "1" Dentist : assigned to >
+
+@enduml
