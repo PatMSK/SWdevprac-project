@@ -1,0 +1,28 @@
+@startuml
+actor "User" as User
+actor "Admin" as Admin
+
+rectangle "Registration and Login System" {
+  User --> (Register)
+  User --> (Login)
+  User --> (Logout)
+  
+  (Login) --> (Book Session)
+  (Book Session) --> (View Bookings)
+  (View Bookings) --> (Edit Booking)
+  (View Bookings) --> (Delete Booking)
+  User --> (Report bug/errors/problem)
+}
+
+rectangle "Admin Panel" {
+  Admin --> (View Bookings)
+  Admin --> (Edit Bookings)
+  Admin --> (Delete Bookings)
+}
+
+rectangle "Dentist Information" {
+  (Book Session) --> (Select Preferred Dentist)
+  (Select Preferred Dentist) --> (View Dentist Info)
+}
+
+@enduml
