@@ -1,0 +1,66 @@
+@startuml
+actor User
+actor Admin
+
+participant "Frontend" as FE
+participant "AuthController" as Auth
+participant "UserController" as UserCtrl
+participant "AppointmentController" as ApptCtrl
+participant "DentistController" as DentistCtrl
+participant "ReportController" as ReportCtrl
+participant "Database" as DB
+
+== User Registration ==
+User -> FE : Fill registration form
+FE -> Auth : POST /register (name, email, tel, password)
+Auth -> DB : Save new user
+DB --> Auth : User created
+Auth --> FE : Registration success
+
+== User Login ==
+User -> FE : Submit login credentials
+FE -> Auth : POST /login (email, password)
+Auth -> DB : Find and validate user
+DB --> Auth : User object + JWT
+Auth --> FE : Return JWT
+
+== Book Appointment ==
+User -> FE : Select date & dentist
+FE -> DentistCtrl : GET /dentists
+DentistCtrl -> DB : Fetch dentist list
+DB --> DentistCtrl : Dentist[]
+DentistCtrl --> FE : Dentist list
+
+FE -> ApptCtrl : POST /appointments (date, dentistId)
+ApptCtrl -> DB : Create appointment (user, date, dentist)
+DB --> ApptCtrl : Appointment created
+ApptCtrl --> FE : Booking confirmed
+
+== View and Edit Booking ==
+User -> FE : View booking
+FE -> ApptCtrl : GET /appointments/:userId
+ApptCtrl -> DB : Find by user ID
+DB --> ApptCtrl : Appointment[]
+ApptCtrl --> FE : Show appointments
+
+User -> FE : Edit booking
+FE -> ApptCtrl : PUT /appointments/:id
+ApptCtrl -> DB : Update appointment
+DB --> ApptCtrl : Updated appointment
+ApptCtrl --> FE : Booking updated
+
+== Admin Views All Bookings ==
+Admin -> FE : View all bookings
+FE -> ApptCtrl : GET /appointments
+ApptCtrl -> DB : Find all appointments
+DB --> ApptCtrl : Appointment[]
+ApptCtrl --> FE : Show all appointments
+
+== Report Bug ==
+User -> FE : Submit bug report
+FE -> ReportCtrl : POST /reports (title, desc, userId)
+ReportCtrl -> DB : Save bug report
+DB --> ReportCtrl : Report created
+ReportCtrl --> FE : Report submitted
+
+@enduml
