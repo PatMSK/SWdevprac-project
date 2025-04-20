@@ -4,6 +4,22 @@ exports.register = async (req, res, next) => {
   try {
     const { name, email, password, role, telephone } = req.body;
 
+    if (telephone.length !== 10) {
+      return res.status(400).json({
+        success: false,
+        msg: "Telephone number must be exactly 10 digits long"
+      });
+    }
+
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        msg: "Please provide a valid email address"
+      });
+    }
+
     const user = await User.create({
       name,
       email,
