@@ -11,7 +11,7 @@
 - [X] The system shall allow the admin to edit any bookings.
 - [X] The system shall allow the admin to delete any bookings.
 - [X] The system shall allow a registered user to report bug/errors/problem of the system.
-- [ ] Test
+- [X] Test
 - [X] Use Case Diagram
 - [X] Class Diagram
 - [X] Sequence Diagram
