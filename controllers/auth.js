@@ -8,22 +8,30 @@ exports.register = async (req, res, next) => {
       return res.status(400).json({
         success: false,
         msg: "Please provide name, email, password, role and telephone number",
-        });
+      });
     }
 
     if (telephone.length !== 10) {
       return res.status(400).json({
         success: false,
-        msg: "Telephone number must be exactly 10 digits long"
+        msg: "Telephone number must be exactly 10 digits long",
       });
     }
 
+    //duplicated email preventation
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({
+        success: false,
+        msg: "Email already in use",
+      });
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({
         success: false,
-        msg: "Please provide a valid email address"
+        msg: "Please provide a valid email address",
       });
     }
 
