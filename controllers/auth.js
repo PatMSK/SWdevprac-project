@@ -4,6 +4,13 @@ exports.register = async (req, res, next) => {
   try {
     const { name, email, password, role, telephone } = req.body;
 
+    if (!name || !email || !password || !role || !telephone) {
+      return res.status(400).json({
+        success: false,
+        msg: "Please provide name, email, password, role and telephone number",
+        });
+    }
+
     if (telephone.length !== 10) {
       return res.status(400).json({
         success: false,
