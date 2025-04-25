@@ -2,56 +2,94 @@
 actor User
 actor Admin
 
-participant "Frontend" as FE
 participant "AuthController" as Auth
 participant "UserController" as UserCtrl
 participant "AppointmentController" as ApptCtrl
 participant "DentistController" as DentistCtrl
 participant "Database" as DB
 
-== User Registration ==
-User -> FE : Fill registration form
-FE -> Auth : POST /register (name, email, tel, password)
+== User and Admin Registration ==
+User -> Auth : POST /register (name, email, tel, password)
+Admin -> Auth : POST /register (name, email, tel, password)
 Auth -> DB : Save new user
 DB --> Auth : User created
-Auth --> FE : Registration success
+Auth --> User : Registration success
+Auth --> Admin : Registration success
 
-== User Login ==
-User -> FE : Submit login credentials
-FE -> Auth : POST /login (email, password)
+== User and Admin Login ==
+User -> Auth : POST /login (email, password)
+Admin -> Auth : POST /login (email, password)
 Auth -> DB : Find and validate user
 DB --> Auth : User object + JWT
-Auth --> FE : Return JWT
+Auth --> User : Return JWT
+Auth --> Admin : Return JWT
 
-== Book Appointment ==
-User -> FE : Select date & dentist
-FE -> DentistCtrl : GET /dentists
+== User and Admin Book Appointment ==
+User -> DentistCtrl : GET /dentists
+Admin -> DentistCtrl : GET /dentists
 DentistCtrl -> DB : Fetch dentist list
 DB --> DentistCtrl : Dentist[]
-DentistCtrl --> FE : Dentist list
+DentistCtrl --> User : Dentist list
+DentistCtrl --> Admin : Dentist list
 
-FE -> ApptCtrl : POST /appointments (date, dentistId)
+User -> ApptCtrl : POST /appointments (date, dentistId)
+Admin -> ApptCtrl : POST /appointments (date, dentistId)
 ApptCtrl -> DB : Create appointment (user, date, dentist)
 DB --> ApptCtrl : Appointment created
-ApptCtrl --> FE : Booking confirmed
+ApptCtrl --> User : Booking confirmed
+ApptCtrl --> Admin : Booking confirmed
 
 == View and Edit Booking ==
-User -> FE : View booking
-FE -> ApptCtrl : GET /appointments/:userId
+User -> ApptCtrl : GET /appointments/:userId
+Admin -> ApptCtrl : GET /appointments/:userId
 ApptCtrl -> DB : Find by user ID
 DB --> ApptCtrl : Appointment[]
-ApptCtrl --> FE : Show appointments
+ApptCtrl --> User : Show appointments
+ApptCtrl --> Admin : Show appointments
 
-User -> FE : Edit booking
-FE -> ApptCtrl : PUT /appointments/:id
+User -> ApptCtrl : PUT /appointments/:id
+Admin -> ApptCtrl : PUT /appointments/:id
 ApptCtrl -> DB : Update appointment
 DB --> ApptCtrl : Updated appointment
-ApptCtrl --> FE : Booking updated
+ApptCtrl --> User : Booking updated
+ApptCtrl --> Admin : Booking updated
+
+== Delete Appointment ==
+User -> ApptCtrl : DELETE /appointments/:id
+Admin -> ApptCtrl : DELETE /appointments/:id
+ApptCtrl -> DB : Delete appointment
+DB --> ApptCtrl : Appointment deleted
+ApptCtrl --> User : Appointment deleted
+ApptCtrl --> Admin : Appointment deleted
 
 == Admin Views All Bookings ==
-Admin -> FE : View all bookings
-FE -> ApptCtrl : GET /appointments
+Admin -> ApptCtrl : GET /appointments
 ApptCtrl -> DB : Find all appointments
 DB --> ApptCtrl : Appointment[]
-ApptCtrl --> FE : Show all appointments
+ApptCtrl --> Admin : Show all appointments
+
+== Admin Create, Update, Delete Dentists ==
+Admin -> DentistCtrl : POST /dentists (create)
+DentistCtrl -> DB : Create dentist
+DB --> DentistCtrl : Dentist created
+DentistCtrl --> Admin : Dentist created
+
+Admin -> DentistCtrl : PUT /dentists/:id (update)
+DentistCtrl -> DB : Update dentist info
+DB --> DentistCtrl : Dentist updated
+DentistCtrl --> Admin : Dentist updated
+
+Admin -> DentistCtrl : DELETE /dentists/:id (delete)
+DentistCtrl -> DB : Delete dentist
+DB --> DentistCtrl : Dentist deleted
+DentistCtrl --> Admin : Dentist deleted
+
+== View Dentist by ID ==
+User -> DentistCtrl : GET /dentists/:id
+Admin -> DentistCtrl : GET /dentists/:id
+DentistCtrl -> DB : Find dentist by ID
+DB --> DentistCtrl : Dentist
+DentistCtrl --> User : Show dentist details
+DentistCtrl --> Admin : Show dentist details
+
 @enduml
