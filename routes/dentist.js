@@ -8,11 +8,11 @@ const { protect, authorize } = require('../middleware/auth')
 router.use('/:dentistId/appointments', appointmentsRouter)
 
 router.route('/')
-    .get(getDentists)
+    .get(protect, getDentists)
     .post(protect, authorize('admin'), createDentist)
 
 router.route('/:id')
-    .get(getDentist)
+    .get(protect, getDentist)
     .put(protect, authorize('admin'),updateDentist)
     .delete(protect, authorize('admin'),deleteDentist)
 
