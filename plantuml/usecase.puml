@@ -11,7 +11,6 @@ rectangle "Registration and Login System" {
   (Book Session) --> (View Bookings)
   (View Bookings) --> (Edit Booking)
   (View Bookings) --> (Delete Booking)
-  User --> (Report bug/errors/problem)
 }
 
 rectangle "Admin Panel" {
