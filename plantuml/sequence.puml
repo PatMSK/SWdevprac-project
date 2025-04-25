@@ -7,7 +7,6 @@ participant "AuthController" as Auth
 participant "UserController" as UserCtrl
 participant "AppointmentController" as ApptCtrl
 participant "DentistController" as DentistCtrl
-participant "ReportController" as ReportCtrl
 participant "Database" as DB
 
 == User Registration ==
@@ -55,12 +54,4 @@ FE -> ApptCtrl : GET /appointments
 ApptCtrl -> DB : Find all appointments
 DB --> ApptCtrl : Appointment[]
 ApptCtrl --> FE : Show all appointments
-
-== Report Bug ==
-User -> FE : Submit bug report
-FE -> ReportCtrl : POST /reports (title, desc, userId)
-ReportCtrl -> DB : Save bug report
-DB --> ReportCtrl : Report created
-ReportCtrl --> FE : Report submitted
-
 @enduml

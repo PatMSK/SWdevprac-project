@@ -26,16 +26,8 @@ class Appointment {
     + dentist: ObjectId → Dentist
 }
 
-class Report {
-    - Title: String
-    - Description: String
-    - Status: String ("Pending" | "In Progress" | "Resolved")
-    - CreateAt: Date
-    + user: ObjectId → User
-}
 
 User "1" --> "*" Appointment : books >
-User "1" --> "*" Report : submits >
 Appointment "*" --> "1" Dentist : assigned to >
 
 @enduml
