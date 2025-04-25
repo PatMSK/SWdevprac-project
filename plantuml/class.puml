@@ -1,33 +1,43 @@
 @startuml
 
 class User {
-    - name: String
-    - email: String
-    - password: String
-    - telephone: Number
-    - role: String
-    - resetPasswordToken: String
-    - resetPasswordExpire: Date
-    - createdAt: Date
-    + getSignedJwtToken()
-    + matchPassword()
+  +name: String
+  +email: String
+  +role: String
+  +password: String
+  +telephone: Number
+  +resetPasswordToken: String
+  +resetPasswordExpire: Date
+  +createdAt: Date
+  +register()
+  +login()
+  +getMe()
+  +logout()
 }
 
 class Dentist {
-    - name: String
-    - yearsOfExperience: Number
-    - expertise: String
+  +name: String
+  +yearsOfExperience: Number
+  +expertise: String
+  +getDentists(id)
+  +getDentist()
+  +createDentist()
+  +updateDentist(id)
+  +deleteDentist(id)
 }
 
 class Appointment {
-    - apptDate: Date
-    - createAt: Date
-    + user: ObjectId → User
-    + dentist: ObjectId → Dentist
+  +apptDate: Date
+  +createAt: Date
+  +getAppointments(id)
+  +getAppointment()
+  +createAppointment()
+  +updateAppointment(id)
+  +deleteAppointment(id)
 }
 
 
-User "1" --> "*" Appointment : books >
-Appointment "*" --> "1" Dentist : assigned to >
+User "1" -- "1" Appointment : book >
+Dentist "1" -- "many" Appointment : has >
 
 @enduml

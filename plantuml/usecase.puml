@@ -1,27 +1,65 @@
 @startuml
-actor "User" as User
-actor "Admin" as Admin
+left to right direction
 
-rectangle "Registration and Login System" {
-  User --> (Register)
-  User --> (Login)
-  User --> (Logout)
-  
-  (Login) --> (Book Session)
-  (Book Session) --> (View Bookings)
-  (View Bookings) --> (Edit Booking)
-  (View Bookings) --> (Delete Booking)
+actor User
+actor "New User" as NewUser
+actor "Authenticated User" as AuthUser
+actor Admin
+
+rectangle "Login/Register System" {
+    (Register) as UC_Register
+    (Login) as UC_Login
+    (Logout) as UC_Logout
 }
 
-rectangle "Admin Panel" {
-  Admin --> (View Bookings)
-  Admin --> (Edit Bookings)
-  Admin --> (Delete Bookings)
+rectangle "Dentist Appointment System" {
+    
+    
+    (View Dentist) as UC_ViewDentist
+    (View All Dentists) as UC_ViewAllDentists
+    (Create Dentist) as UC_CreateDentist
+    (Update Dentist) as UC_UpdateDentist
+    (Delete Dentist) as UC_DeleteDentist
+    
+
+    (Create Appointment) as UC_CreateAppt
+    (Update Appointment) as UC_UpdateAppt
+    (Delete Appointment) as UC_DeleteAppt
+    (View Appointment) as UC_ViewAppt
+    (View All Appointments) as UC_ViewAllAppt
 }
 
-rectangle "Dentist Information" {
-  (Book Session) --> (Select Preferred Dentist)
-  (Select Preferred Dentist) --> (View Dentist Info)
-}
+User --> NewUser
+User --> AuthUser
+
+NewUser --> UC_Register
+NewUser --> UC_Login
+
+
+AuthUser --> UC_ViewDentist
+AuthUser --> UC_CreateAppt
+AuthUser --> UC_UpdateAppt
+AuthUser --> UC_DeleteAppt
+AuthUser --> UC_ViewAppt
+AuthUser --> UC_Logout
+AuthUser --> UC_ViewAllDentists
+AuthUser --> UC_Login
+
+
+' Put admin on right by reversing the arrows
+UC_CreateDentist <-- Admin
+UC_UpdateDentist <-- Admin
+UC_DeleteDentist <-- Admin
+UC_ViewDentist <-- Admin
+UC_ViewAllDentists <-- Admin
+UC_CreateAppt <-- Admin
+UC_UpdateAppt <-- Admin
+UC_DeleteAppt <-- Admin
+UC_ViewAppt <-- Admin
+UC_ViewAllAppt <-- Admin
+UC_Logout <-- Admin
+UC_Login <-- Admin
+UC_Register <-- Admin
+
 
 @enduml
